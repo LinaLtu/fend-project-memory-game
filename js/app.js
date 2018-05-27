@@ -21,6 +21,9 @@ let cards = [
     'bomb'
 ];
 
+let openedCards = [];
+let blockedCards = [];
+
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -45,19 +48,65 @@ function shuffle(array) {
     return array;
 }
 
+// Opens a card on click (if closed)
+
+function handleCardClick(e) {
+    let clickedCard = e.target.childNodes[0].dataset.name;
+
+    if (blockedCards.includes(clickedCard)) {
+        return;
+    }
+
+    console.log('WE MUST OPEN IT');
+    e.target.classList.add('open');
+    e.target.classList.add('show');
+
+    if (openedCards.length === 0) {
+        // No cards were previously open
+        openedCards.push(clickedCard);
+        return;
+    }
+
+    let indexOfOpenedCard = openedCards.indexOf(clickedCard);
+    if (indexOfOpenedCard > -1) {
+        // The other card with same icon had already been opened, we have a match!
+        openedCards.splice(indexOfOpenedCard, 1);
+        blockedCards.push(clickedCard);
+
+        setTimeout(() => {
+            // 1. TODO ADD MATCH CLASS TO BOTH CARDS WITH SAME ICON
+            // 2. TODO CHECK IF THE USER WON
+        }, 1000);
+    } else {
+        // Another icon had previously been opened
+        setTimeout(() => {
+            // TODO Also the other icon must be closed
+            removeClasses(e.target);
+        }, 1000);
+    }
+    console.log('Blocked ', blockedCards);
+}
+
+function removeClasses(element) {
+    element.classList.remove('open');
+    element.classList.remove('show');
+}
+
 window.onload = function() {
+    // Shuffle the cards
+
     cards = shuffle(cards);
-    console.log(cards);
 
     let selectedCards = document.getElementsByClassName('card');
     selectedCards = Array.prototype.slice.call(selectedCards);
     console.log(selectedCards);
 
-    // <i class="fa fa-diamond"></i>
+    // Loop over the card elements, add icons and events listeners
 
     selectedCards.forEach((selectedCard, index) => {
-        // console.log(cards, index);
-        selectedCard.innerHTML = `<i class="fa fa-${cards[index]}"></i>`;
+        selectedCard.innerHTML = `<i class="fa fa-${cards[index]}"
+        data-name="${cards[index]}"></i>`;
+        selectedCard.addEventListener('click', handleCardClick);
     });
 };
 
