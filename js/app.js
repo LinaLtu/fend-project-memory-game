@@ -3,26 +3,27 @@
  */
 
 let cards = [
-    'diamond',
-    'paper-plane-o',
-    'anchor',
-    'bolt',
-    'cube',
-    'leaf',
-    'bicycle',
-    'bomb',
-    'diamond',
-    'paper-plane-o',
-    'anchor',
-    'bolt',
-    'cube',
-    'leaf',
-    'bicycle',
-    'bomb'
+  'diamond',
+  'paper-plane-o',
+  'anchor',
+  'bolt',
+  'cube',
+  'leaf',
+  'bicycle',
+  'bomb',
+  'diamond',
+  'paper-plane-o',
+  'anchor',
+  'bolt',
+  'cube',
+  'leaf',
+  'bicycle',
+  'bomb'
 ];
 
 let openedCards = [];
 let blockedCards = [];
+let failedAttempts = 0;
 
 /*
  * Display the cards on the page
@@ -33,105 +34,122 @@ let blockedCards = [];
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length,
-        temporaryValue,
-        randomIndex;
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
 
-    return array;
+  return array;
 }
 
 // Opens a card on click (if closed)
 
 function handleCardClick(e) {
-    if (openedCards.length === 2) {
-        return;
-    }
+  if (openedCards.length === 2) {
+    return;
+  }
 
-    let clickedCardElement = e.target;
-    let clickedCardName = clickedCardElement.childNodes[0].dataset.name;
+  let clickedCardElement = e.target;
+  let clickedCardName = clickedCardElement.childNodes[0].dataset.name;
 
-    if (blockedCards.find(blockedCardElement => {
-        return blockedCardElement.childNodes[0].dataset.name === clickedCardName;
-      })) {
-        return;
-    }
+  if (blockedCards.find(blockedCardElement => {
+      return blockedCardElement.childNodes[0].dataset.name === clickedCardName;
+    })) {
+    return;
+  }
 
-    console.log('WE MUST OPEN IT');
-    e.target.classList.add('open');
-    e.target.classList.add('show');
+  e.target.classList.add('open');
+  e.target.classList.add('show');
 
-    if (openedCards.length === 0) {
-        // No cards were previously open
-        openedCards.push(clickedCardElement);
-        return;
-    }
-
-    let indexOfOpenedCard = null;
-
-    openedCards.forEach((openedCard, index) => {
-        if (openedCard.childNodes[0].dataset.name === clickedCardName) {
-          indexOfOpenedCard = index;
-        }
-    });
-
+  if (openedCards.length === 0) {
+    // No cards were previously open
     openedCards.push(clickedCardElement);
+    return;
+  }
 
-    if (indexOfOpenedCard !== null) {
-        // The other card with same icon had already been opened, we have a match!
-        blockedCards.push(openedCards[indexOfOpenedCard]);
+  let indexOfOpenedCard = null;
 
-        openedCards.splice(indexOfOpenedCard, 1);
-        blockedCards.push(clickedCardElement);
-
-        setTimeout(() => {
-            console.log('CARD MUST NE BLOCKED')
-            // 1. TODO ADD BLOCKED CLASS TO BOTH CARDS WITH SAME ICON
-          blockedCards.forEach((blockedCard) => {
-              blockedCard.classList.add('match');
-          })
-            // 2. TODO CHECK IF THE USER WON
-        }, 1000);
-    } else {
-        // Check whether another icon had previously been opened
-      if (openedCards.length === 2) {
-        setTimeout(() => {
-          openedCards.forEach(openCard => {
-            removeOpenClasses(openCard);
-          });
-          openedCards = [];
-        }, 1000);
-      }
+  openedCards.forEach((openedCard, index) => {
+    if (openedCard.childNodes[0].dataset.name === clickedCardName) {
+      indexOfOpenedCard = index;
     }
-    console.log('Opened ', openedCards);
+  });
+
+  openedCards.push(clickedCardElement);
+
+  if (indexOfOpenedCard !== null) {
+    // The other card with same icon had already been opened, we have a match!
+    blockedCards.push(openedCards[indexOfOpenedCard]);
+
+    openedCards.splice(indexOfOpenedCard, 1);
+    blockedCards.push(clickedCardElement);
+
+    setTimeout(() => {
+      blockedCards.forEach((blockedCard) => {
+        blockedCard.classList.add('match');
+      })
+      raiseMoves();
+      // 2. TODO CHECK IF THE USER WON
+    }, 1000);
+  } else {
+    // Check whether another icon had previously been opened
+    if (openedCards.length === 2) {
+      failedAttempts++;
+      setTimeout(() => {
+        openedCards.forEach(openCard => {
+          removeOpenClasses(openCard);
+        });
+        openedCards = [];
+      }, 1000);
+      raiseMoves();
+      checkRating(failedAttempts);
+    }
+  }
+}
+
+function raiseMoves() {
+  let movesElement = document.getElementById('moves');
+  movesElement.innerHTML = parseInt(movesElement.innerText) + 1;
+}
+
+function checkRating(failedAttempts) {
+  if (failedAttempts === 4 || failedAttempts === 8) {
+    let allStars = document.getElementsByClassName('stars');
+    allStars = Array.prototype.slice.call(allStars);
+    let allStarsElement = allStars[0];
+
+    let element = allStarsElement.firstChild;
+    allStarsElement.removeChild(element);
+    element.remove();
+  }
 }
 
 function removeOpenClasses(element) {
-    element.classList.remove('open');
-    element.classList.remove('show');
+  element.classList.remove('open');
+  element.classList.remove('show');
 }
 
-window.onload = function() {
-    // Shuffle the cards
-    cards = shuffle(cards);
+window.onload = function () {
+  // Shuffle the cards
+  cards = shuffle(cards);
 
-    let allCards = document.getElementsByClassName('card');
-    allCards = Array.prototype.slice.call(allCards);
+  let allCards = document.getElementsByClassName('card');
+  allCards = Array.prototype.slice.call(allCards);
 
-    // Loop over the card elements, add icons and events listeners
+  // Loop over the card elements, add icons and events listeners
 
-    allCards.forEach((cardElement, index) => {
-        cardElement.innerHTML = `<i class="fa fa-${cards[index]}"
+  allCards.forEach((cardElement, index) => {
+    cardElement.innerHTML = `<i class="fa fa-${cards[index]}"
         data-name="${cards[index]}"></i>`;
-        cardElement.addEventListener('click', handleCardClick);
-    });
+    cardElement.addEventListener('click', handleCardClick);
+  });
 };
 
 /*
