@@ -51,9 +51,16 @@ function shuffle(array) {
 // Opens a card on click (if closed)
 
 function handleCardClick(e) {
-    let clickedCard = e.target.childNodes[0].dataset.name;
+    if (openedCards.length === 2) {
+        return;
+    }
 
-    if (blockedCards.includes(clickedCard)) {
+    let clickedCardElement = e.target;
+    let clickedCardName = clickedCardElement.childNodes[0].dataset.name;
+
+    if (blockedCards.find(blockedCardElement => {
+        return blockedCardElement.childNodes[0].dataset.name === clickedCardName;
+      })) {
         return;
     }
 
@@ -63,50 +70,67 @@ function handleCardClick(e) {
 
     if (openedCards.length === 0) {
         // No cards were previously open
-        openedCards.push(clickedCard);
+        openedCards.push(clickedCardElement);
         return;
     }
 
-    let indexOfOpenedCard = openedCards.indexOf(clickedCard);
-    if (indexOfOpenedCard > -1) {
+    let indexOfOpenedCard = null;
+
+    openedCards.forEach((openedCard, index) => {
+        if (openedCard.childNodes[0].dataset.name === clickedCardName) {
+          indexOfOpenedCard = index;
+        }
+    });
+
+    openedCards.push(clickedCardElement);
+
+    if (indexOfOpenedCard !== null) {
         // The other card with same icon had already been opened, we have a match!
+        blockedCards.push(openedCards[indexOfOpenedCard]);
+
         openedCards.splice(indexOfOpenedCard, 1);
-        blockedCards.push(clickedCard);
+        blockedCards.push(clickedCardElement);
 
         setTimeout(() => {
-            // 1. TODO ADD MATCH CLASS TO BOTH CARDS WITH SAME ICON
+            console.log('CARD MUST NE BLOCKED')
+            // 1. TODO ADD BLOCKED CLASS TO BOTH CARDS WITH SAME ICON
+          blockedCards.forEach((blockedCard) => {
+              blockedCard.classList.add('match');
+          })
             // 2. TODO CHECK IF THE USER WON
         }, 1000);
     } else {
-        // Another icon had previously been opened
+        // Check whether another icon had previously been opened
+      if (openedCards.length === 2) {
         setTimeout(() => {
-            // TODO Also the other icon must be closed
-            removeClasses(e.target);
+          openedCards.forEach(openCard => {
+            removeOpenClasses(openCard);
+          });
+          openedCards = [];
         }, 1000);
+      }
     }
-    console.log('Blocked ', blockedCards);
+    console.log('Opened ', openedCards);
 }
 
-function removeClasses(element) {
+function removeOpenClasses(element) {
     element.classList.remove('open');
     element.classList.remove('show');
 }
 
 window.onload = function() {
     // Shuffle the cards
-
     cards = shuffle(cards);
 
-    let selectedCards = document.getElementsByClassName('card');
-    selectedCards = Array.prototype.slice.call(selectedCards);
-    console.log(selectedCards);
+    let allCards = document.getElementsByClassName('card');
+    allCards = Array.prototype.slice.call(allCards);
 
     // Loop over the card elements, add icons and events listeners
 
-    selectedCards.forEach((selectedCard, index) => {
-        selectedCard.innerHTML = `<i class="fa fa-${cards[index]}"
+    allCards.forEach((cardElement, index) => {
+        cardElement.innerHTML = `<i class="fa fa-${cards[index]}"
         data-name="${cards[index]}"></i>`;
-        selectedCard.addEventListener('click', handleCardClick);
+        cardElement.addEventListener('click', handleCardClick);
     });
 };
 
