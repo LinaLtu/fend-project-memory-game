@@ -49,8 +49,21 @@ function shuffle(array) {
     return array;
 }
 
-// Opens a card on click (if closed)
+/**
+ * Check whether the player won
+ *
+ * @return bool
+ */
+function checkIfWon() {
+    return blockedCards.length === cards.length;
+}
 
+/**
+ * Opens a card on click (if closed)
+ *
+ * @param e
+ * @return undefined
+ */
 function handleCardClick(e) {
     if (openedCards.length === 2) {
         return;
@@ -101,7 +114,22 @@ function handleCardClick(e) {
                 blockedCard.classList.add('match');
             });
             raiseMoves();
-            // 2. TODO CHECK IF THE USER WON
+            if (checkIfWon()) {
+                let modalMovesCounter = document.getElementsByClassName(
+                    'modal-moves'
+                )[0];
+                let movesElement = document.getElementById('moves');
+                modalMovesCounter.innerHTML = movesElement.innerText;
+
+                let modalStarsCounter = document.getElementsByClassName(
+                    'modal-stars'
+                )[0];
+
+                modalStarsCounter.innerHTML = getCurrentStars();
+
+                let modal = document.getElementsByClassName('modal')[0];
+                modal.classList.remove('modal-hidden');
+            }
         }, 1000);
     } else {
         // Check whether another icon had previously been opened
@@ -157,6 +185,14 @@ function resetStars() {
     }
 }
 
+function getCurrentStars() {
+    let allStars = document.getElementsByClassName('stars');
+    allStars = Array.prototype.slice.call(allStars);
+    let allStarsElement = allStars[0];
+
+    return allStarsElement.childNodes.length;
+}
+
 /**
  * Remove open classes from an open card element
  *
@@ -190,6 +226,16 @@ function restartGame() {
     resetStars();
 }
 
+/**
+ * Restart the game and close the modal
+ */
+function closeModal() {
+    restartGame();
+
+    let modal = document.getElementsByClassName('modal')[0];
+    modal.classList.add('modal-hidden');
+}
+
 window.onload = function() {
     // Shuffle the cards
     cards = shuffle(cards);
@@ -207,6 +253,8 @@ window.onload = function() {
 
     let restartButton = document.getElementsByClassName('fa fa-repeat')[0];
     restartButton.addEventListener('click', restartGame);
+    let modalButton = document.getElementsByClassName('modal-button')[0];
+    modalButton.addEventListener('click', closeModal);
 };
 
 /*
