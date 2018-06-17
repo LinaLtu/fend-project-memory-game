@@ -105,7 +105,12 @@ h1 {
 
 .score-panel .restart {
     float: right;
+    margin-left: 2em;
     cursor: pointer;
+}
+
+.score-panel .timer {
+    float: right;
 }
 
 /*

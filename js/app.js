@@ -24,6 +24,8 @@ let cards = [
 let openedCards = [];
 let blockedCards = [];
 let failedAttempts = 0;
+let gameStarted = false;
+let min, sec, intervalId, minString, secString;
 
 /*
  * Display the cards on the page
@@ -65,6 +67,10 @@ function checkIfWon() {
  * @return undefined
  */
 function handleCardClick(e) {
+    if (gameStarted === false) {
+        gameStarted = true;
+        startTimer();
+    }
     if (openedCards.length === 2) {
         return;
     }
@@ -115,6 +121,7 @@ function handleCardClick(e) {
             });
             raiseMoves();
             if (checkIfWon()) {
+                stopTimer();
                 let modalMovesCounter = document.getElementsByClassName(
                     'modal-moves'
                 )[0];
@@ -219,11 +226,16 @@ function restartGame() {
     openedCards = [];
     blockedCards = [];
     failedAttempts = 0;
+    gameStarted = false;
 
     shuffle(cards);
 
     resetMoves();
     resetStars();
+    stopTimer();
+    updateTimer('00:00');
+    sec = 0;
+    min = 0;
 }
 
 /**
@@ -256,6 +268,47 @@ window.onload = function() {
     let modalButton = document.getElementsByClassName('modal-button')[0];
     modalButton.addEventListener('click', closeModal);
 };
+
+/**
+ * Timer
+ */
+
+function startTimer() {
+    sec = 0;
+    min = 0;
+    intervalId = setInterval(function() {
+        if (sec == 60) {
+            sec = 0;
+            min++;
+        } else {
+            sec++;
+        }
+
+        minString = addZeroToTimer(min);
+        secString = addZeroToTimer(sec);
+
+        updateTimer(minString + ':' + secString);
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(intervalId);
+}
+
+function updateTimer(text) {
+    let timer = document.getElementsByClassName('timer')[0];
+    timer.innerHTML = text;
+}
+
+function addZeroToTimer(time) {
+    let zeroedTime;
+    if (time < 10) {
+        zeroedTime = '0' + time;
+    } else {
+        zeroedTime = time.toString();
+    }
+    return zeroedTime;
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
