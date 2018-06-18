@@ -121,7 +121,7 @@ h1 {
   width: 100%;
   height: 100%;
   position: fixed;
-  background: white;
+  background: #ffffff url("../img/geometry2.png");
   z-index: 1;
 }
 

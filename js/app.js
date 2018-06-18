@@ -78,6 +78,7 @@ function handleCardClick(e) {
 
   let clickedCardName = clickedCardElement.childNodes[0].dataset.name; //returns the name of the icon
 
+  //if the same card is clicked twice, it just "waits" for another card to be clicked on
   if (clickedCardElement.classList.contains("clicked")) {
     return;
   }
