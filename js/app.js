@@ -74,8 +74,13 @@ function handleCardClick(e) {
     return;
   }
 
-  let clickedCardElement = e.target;
-  let clickedCardName = clickedCardElement.childNodes[0].dataset.name;
+  let clickedCardElement = e.target; //returns a <li> element
+
+  let clickedCardName = clickedCardElement.childNodes[0].dataset.name; //returns the name of the icon
+
+  if (clickedCardElement.classList.contains("clicked")) {
+    return;
+  }
 
   if (
     blockedCards.find(blockedCardElement => {
@@ -85,6 +90,7 @@ function handleCardClick(e) {
     return;
   }
 
+  e.target.classList.add("clicked");
   e.target.classList.add("open");
   e.target.classList.add("show");
 
@@ -116,7 +122,7 @@ function handleCardClick(e) {
         blockedCard.classList.add("match");
       });
       raiseMoves();
-      if (true) {
+      if (checkIfWon()) {
         stopTimer();
         let modalMovesCounter = document.getElementsByClassName(
           "modal-moves"
@@ -204,6 +210,7 @@ function getCurrentStars() {
 function removeOpenClasses(element) {
   element.classList.remove("open");
   element.classList.remove("show");
+  element.classList.remove("clicked");
 }
 
 /**
