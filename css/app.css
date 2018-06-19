@@ -26,6 +26,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  flex-wrap: wrap;
 }
 
 h1 {
@@ -145,4 +146,60 @@ h1 {
   background: rgb(58, 161, 165);
   transition: background-color 1s;
   transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+@media only screen and (max-width: 405px) {
+  .deck {
+    width: 80%;
+  }
+  .deck .card {
+    width: 110px;
+    height: 110px;
+    margin: 1%;
+  }
+  .score-panel {
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 406px) and (max-width: 440px) {
+  .deck {
+    width: 80%;
+  }
+  .deck .card {
+    width: 115px;
+    height: 115px;
+    margin: 1%;
+  }
+}
+
+@media only screen and (min-width: 441px) and (max-width: 500px) {
+  .deck {
+    width: 80%;
+  }
+  .deck .card {
+    width: 125px;
+    height: 125px;
+    margin: 1%;
+  }
+}
+
+@media only screen and (min-width: 501px) and (max-width: 540px) {
+  .deck {
+    width: 80%;
+  }
+  .deck .card {
+    margin: 1%;
+    margin-bottom: 2%;
+  }
+}
+
+@media only screen and (min-width: 541px) and (max-width: 700px) {
+  .deck {
+    width: 90%;
+  }
+  .deck .card {
+    margin: 1%;
+    margin-bottom: 2%;
+  }
 }
