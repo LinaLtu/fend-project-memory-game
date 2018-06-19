@@ -55,7 +55,6 @@ function shuffle(array) {
 /**
  * Get a randomized list of icons, assigne them to cards and add event listeners to them
  */
-
 function shuffleCards() {
   cards = shuffle(cards);
 
@@ -187,11 +186,20 @@ function handleCardClick(e) {
   }
 }
 
+/**
+ * Increase the number of moves on every card clicked
+ *
+ */
 function raiseMoves() {
   let movesElement = document.getElementById("moves");
   movesElement.innerHTML = parseInt(movesElement.innerText) + 1;
 }
 
+/**
+ * Check how many times (unmached) cards have been opened and remove start accordingly
+ *
+ * @param failedAttempts
+ */
 function checkRating(failedAttempts) {
   if (failedAttempts === 4 || failedAttempts === 8) {
     let allStars = document.getElementsByClassName("stars");
@@ -204,6 +212,10 @@ function checkRating(failedAttempts) {
   }
 }
 
+/**
+ * Set the number of moves to 0
+ *
+ */
 function resetMoves() {
   let movesElement = document.getElementById("moves");
   movesElement.innerHTML = 0;
@@ -225,6 +237,9 @@ function resetStars() {
   }
 }
 
+/**
+ * Get current number of starts
+ */
 function getCurrentStars() {
   let allStars = document.getElementsByClassName("stars");
   allStars = Array.prototype.slice.call(allStars);
@@ -297,6 +312,9 @@ window.onload = function() {
  * Timer
  */
 
+/**
+ * Launch timer (start counting seconds and minutes)
+ */
 function startTimer() {
   sec = 0;
   min = 0;
@@ -315,17 +333,26 @@ function startTimer() {
   }, 1000);
 }
 
+/**
+ * Stop timer, record current seconds and minutes
+ */
 function stopTimer() {
   currentSeconds = addZeroToTimer(min);
   currentMinutes = addZeroToTimer(sec);
   clearInterval(intervalId);
 }
 
+/**
+ * Update HTML with the current time
+ */
 function updateTimer(text) {
   let timer = document.getElementsByClassName("timer")[0];
   timer.innerHTML = text;
 }
 
+/**
+ * Add 0 in front of one-digit seconds and minutes
+ */
 function addZeroToTimer(time) {
   let zeroedTime;
   if (time < 10) {
