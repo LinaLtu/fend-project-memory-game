@@ -6,4 +6,4 @@ Memory Game is a virtual card game. On load, a user sees a deck with 16 covered 
 
 ## Measurement of Success
 
-When the first card is opened, a timer starts running. With every move, a counter is increased. After three unsuccessful tries, one star is removed from the score deck. The user can restart the game at any time by clicking "reset" icon on the right hand corner of the deck. When all cards are open, the user gets a notification with information on how much time it took him to complete the task, how many moves they have made and how many start they have remaining. Then they can restart the game again.
+When the first card is opened, a timer starts running. With every move, a counter is increased. After three unsuccessful trials, one star is removed from the score deck. The user can restart the game at any time by clicking "reset" icon on the right hand corner of the deck. When all cards are opened and the game is over, the user gets a notification with information on how much time it took for them to complete the task, how many moves they made and how many stars they have remaining. Then they can restart the game again.
