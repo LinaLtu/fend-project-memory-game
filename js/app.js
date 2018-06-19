@@ -71,6 +71,18 @@ function shuffleCards() {
 }
 
 /**
+ * Create <li> for the deck programmatically
+ */
+function appendCards() {
+  let deck = document.getElementsByClassName("deck")[0];
+  let childrenToBeAppended = "";
+  for (let i = 0; i <= 15; i++) {
+    childrenToBeAppended += "<li class='card'></li>";
+  }
+  deck.innerHTML = childrenToBeAppended;
+}
+
+/**
  * Check whether the player won
  *
  * @return bool
@@ -297,6 +309,7 @@ function closeModal() {
 }
 
 window.onload = function() {
+  appendCards();
   // Shuffle the cards
   shuffleCards();
 

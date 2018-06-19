@@ -52,6 +52,10 @@ h1 {
   margin: 0 0 3em;
 }
 
+.card {
+  margin: 5px;
+}
+
 .deck .card {
   height: 125px;
   width: 125px;
