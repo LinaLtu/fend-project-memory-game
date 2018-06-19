@@ -26,6 +26,8 @@ let blockedCards = [];
 let failedAttempts = 0;
 let gameStarted = false;
 let min, sec, intervalId, minString, secString;
+let currentSeconds;
+let currentMinutes;
 
 /*
  * Display the cards on the page
@@ -48,6 +50,25 @@ function shuffle(array) {
   }
 
   return array;
+}
+
+/**
+ * Get a randomized list of icons, assigne them to cards and add event listeners to them
+ */
+
+function shuffleCards() {
+  cards = shuffle(cards);
+
+  let allCards = document.getElementsByClassName("card");
+  allCards = Array.prototype.slice.call(allCards);
+
+  // Loop over the card elements, add icons and events listeners
+
+  allCards.forEach((cardElement, index) => {
+    cardElement.innerHTML = `<i class="fa fa-${cards[index]}"
+        data-name="${cards[index]}"></i>`;
+    cardElement.addEventListener("click", handleCardClick);
+  });
 }
 
 /**
@@ -125,6 +146,7 @@ function handleCardClick(e) {
       raiseMoves();
       if (checkIfWon()) {
         stopTimer();
+        //get current time
         let modalMovesCounter = document.getElementsByClassName(
           "modal-moves"
         )[0];
@@ -136,6 +158,14 @@ function handleCardClick(e) {
         )[0];
 
         modalStarsCounter.innerHTML = getCurrentStars();
+
+        let modalMinutes = document.getElementsByClassName("minutes")[0];
+
+        modalMinutes.innerHTML = currentMinutes;
+
+        let modalSeconds = document.getElementsByClassName("seconds")[0];
+
+        modalSeconds.innerHTML = currentSeconds;
 
         let modal = document.getElementsByClassName("modal")[0];
         modal.classList.remove("modal-hidden");
@@ -218,6 +248,7 @@ function removeOpenClasses(element) {
  * Restart the game
  */
 function restartGame() {
+  shuffleCards();
   openedCards.forEach(openedCard => {
     removeOpenClasses(openedCard);
   });
@@ -231,8 +262,6 @@ function restartGame() {
   blockedCards = [];
   failedAttempts = 0;
   gameStarted = false;
-
-  shuffle(cards);
 
   resetMoves();
   resetStars();
@@ -254,18 +283,7 @@ function closeModal() {
 
 window.onload = function() {
   // Shuffle the cards
-  cards = shuffle(cards);
-
-  let allCards = document.getElementsByClassName("card");
-  allCards = Array.prototype.slice.call(allCards);
-
-  // Loop over the card elements, add icons and events listeners
-
-  allCards.forEach((cardElement, index) => {
-    cardElement.innerHTML = `<i class="fa fa-${cards[index]}"
-        data-name="${cards[index]}"></i>`;
-    cardElement.addEventListener("click", handleCardClick);
-  });
+  shuffleCards();
 
   // Add event listeners to modal (restart game and close modal)
 
@@ -298,6 +316,8 @@ function startTimer() {
 }
 
 function stopTimer() {
+  currentSeconds = addZeroToTimer(min);
+  currentMinutes = addZeroToTimer(sec);
   clearInterval(intervalId);
 }
 
