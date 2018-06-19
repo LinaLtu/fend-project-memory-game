@@ -1,20 +1,9 @@
 # Memory Game Project
 
-## Table of Contents
-
-* [Instructions](#instructions)
-* [Contributing](#contributing)
-
 ## Instructions
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+Memory Game is a virtual card game. On load, a user sees a deck with 16 covered cards. When the user clicks a card, it opens. Then the user opens another card. If the icons match, both cards remain open. If not, they are closed again. The goal of the game is to find all matching cards and open them as quickly as possible.
 
-To get started, open `js/app.js` and start building out the app's functionality
+## Measurement of Success
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+When the first card is opened, a timer starts running. With every move, a counter is increased. After three unsuccessful tries, one star is removed from the score deck. The user can restart the game at any time by clicking "reset" icon on the right hand corner of the deck. When all cards are open, the user gets a notification with information on how much time it took him to complete the task, how many moves they have made and how many start they have remaining. Then they can restart the game again.
