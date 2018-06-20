@@ -1,5 +1,7 @@
 # Memory Game Project
 
+This project has been completed in vanilla JavaScript, no dependencies or libraries used.
+
 ## Instructions
 
 Memory Game is a virtual card game. On load, a user sees a deck with 16 covered cards. When the user clicks a card, it opens. Then the user opens another card. If the icons match, both cards remain open. If not, they are closed again. The goal of the game is to find all matching cards and open them as quickly as possible.
